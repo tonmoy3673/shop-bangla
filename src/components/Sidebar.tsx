@@ -1,6 +1,114 @@
-const SideBar =()=>{
-    return(
-        <div>SideBar</div>
-    )
+import { useEffect, useState } from "react";
+
+interface Product {
+  category: string;
+}
+
+interface FetchResponse {
+  products: Product[];
+}
+const SideBar = () => {
+  const [categories, setCategories] = useState<string[]>([]);
+  const [keywords] = useState<string[]>([
+    "Apple",
+    "Watch",
+    "Fashion",
+    "Trend",
+    "Shoes",
+    "Shirt",
+  ]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("https://dummyjson.com/products");
+        const data: FetchResponse = await response.json();
+
+        const uniqueCategory = Array.from(
+          new Set(data.products.map((product) => product.category))
+        );
+        console.log(uniqueCategory);
+        setCategories(uniqueCategory);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error(`Failed to fetch Categories Data ${err.message}`);
+          throw new Error(`Failed to Fetch Categories Data ${err.message}`);
+        } else {
+          console.error("Unknown Error Found", { err });
+          throw new Error("Unknown Error Found!");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  return (
+    <div className="w-64 p-5 h-screen">
+      <h1 className="text-2xl font-bold mb-10 mt-4">React Store</h1>
+      <section>
+        <input
+          placeholder="Search Product..."
+          type="text"
+          className="border-2 rounded px-2 sm:mb-0"
+        />
+        <div className="flex justify-center items-center mt-3 md:mt-4">
+          <input
+            placeholder="Min"
+            type="text"
+            className="border-2 mr-2 px-5 mb-3 py-2 w-full"
+          />
+          <input
+            placeholder="Max"
+            type="text"
+            className="border-2 mr-2 px-5 mb-3 py-2 w-full"
+          />
+        </div>
+        {/* ============= categories ========= */}
+        <div className="mb-2">
+          <h2 className="text-xl font-semibold mb-3">Categories</h2>
+        </div>
+        {/* ========= display categories ========= */}
+        <section>
+          {categories &&
+            categories.map((category, index) => {
+             return (
+                <label key={index} className="block mb-2">
+                <input
+                  type="radio"
+                  name="category"
+                  value={category}
+                  className="mr-2 w-4 h-4"
+                />
+                {category.toUpperCase()}
+              </label>
+              )
+            })}
+        </section>
+        {/* ============= keywords ====== */}
+        <div className="mb-2 md:mb-5 mt-2 md:mt-4">
+          <h2 className="text-xl font-semibold mb-3">Keywords</h2>
+          <div>
+            {keywords.map((keyword, index) => (
+              <button
+                key={index}
+                className="block text-base mb-2 px-4 py-2 w-full text-left border rounded hover:bg-gray-200"
+              >
+                {keyword.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* ============ reset button ======== */}
+        <button className=" w-full mb-4 py-2 bg-black text-white rounded-md cursor-pointer mt-3 md:mt-5">
+            Reset Filters
+        </button>
+      </section>
+    </div>
+  );
 };
 export default SideBar;

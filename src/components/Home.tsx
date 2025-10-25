@@ -1,9 +1,10 @@
+import SideBar from "./Sidebar";
 
 
 const Home = () => {
     return (
-        <div>
-            Home
+        <div className="">
+          <SideBar/> 
         </div>
     );
 };
