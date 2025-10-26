@@ -1,3 +1,6 @@
+import { createContext, useState, type ReactNode } from "react";
+
+
 interface FilterContextType{
     searchQuery : string;
     setSearchQuery : (query : string)=>void;
@@ -10,3 +13,17 @@ interface FilterContextType{
     keyword : string;
     setKeyword : (keyword:string)=>void;
 };
+
+
+const ProductContext = createContext<FilterContextType | undefined>(undefined);
+
+export const ProductContextProvide : React.FC<FilterContextType> = ({children}:ReactNode)=>{
+
+    const [searchQuery,setSearchQuery] = useState<string>('');
+    
+    return(
+        <ProductContext.Provider value={{}}>
+            {children}
+        </ProductContext.Provider>
+    )
+}
