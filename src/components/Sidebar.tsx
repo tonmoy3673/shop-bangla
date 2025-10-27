@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useProductContext } from "../context/ProductContext";
 
 interface Product {
   category: string;
@@ -19,6 +20,18 @@ const SideBar = () => {
   ]);
 
   const [loading, setLoading] = useState<boolean>(false);
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedCategory,
+    setSelectedCategory,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
+    keyword,
+    setKeyword,
+  } = useProductContext();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -47,6 +60,43 @@ const SideBar = () => {
     fetchCategories();
   }, []);
 
+  // ======== handlePrice =======//
+  const handlePrice = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "min" | "max"
+  ) => {
+    e.preventDefault();
+    const PriceValue = e.target.value ;
+     const value = PriceValue ? parseFloat(PriceValue) : undefined;
+     if (type ==='min') {
+      setMinPrice(value)
+     }
+     else{
+      setMaxPrice(value)
+     }
+
+    
+  };
+
+  // ========= handleRadioCategory =====//
+  const handleRadioCategory=(category:string)=>{
+    setSelectedCategory(category)
+  };
+
+  // ============ handleKeyword ========//
+  const handleKeyWord =(keyword : string)=>{
+    setKeyword(keyword)
+  };
+
+  // ============ resetFilter =======//
+  const resetFilter =()=>{
+    setSearchQuery('');
+    setSelectedCategory('');
+    setMinPrice(undefined);
+    setMaxPrice(undefined);
+    setKeyword('');
+  }
+
   return (
     <div className="w-64 p-5 h-screen">
       <h1 className="text-2xl font-bold mb-10 mt-4">React Store</h1>
@@ -55,17 +105,27 @@ const SideBar = () => {
           placeholder="Search Product..."
           type="text"
           className="border-2 rounded px-2 sm:mb-0"
+          value={searchQuery}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchQuery(e.target.value)
+          }
         />
         <div className="flex justify-center items-center mt-3 md:mt-4">
           <input
             placeholder="Min"
             type="text"
             className="border-2 mr-2 px-5 mb-3 py-2 w-full"
+            value={minPrice ?? ""}
+            onChange={(e) => {
+              handlePrice(e, "min");
+            }}
           />
           <input
             placeholder="Max"
             type="text"
             className="border-2 mr-2 px-5 mb-3 py-2 w-full"
+            value={maxPrice ?? ''}
+            onChange={(e)=> handlePrice(e,'max')}
           />
         </div>
         {/* ============= categories ========= */}
@@ -76,17 +136,19 @@ const SideBar = () => {
         <section>
           {categories &&
             categories.map((category, index) => {
-             return (
+              return (
                 <label key={index} className="block mb-2">
-                <input
-                  type="radio"
-                  name="category"
-                  value={category}
-                  className="mr-2 w-4 h-4"
-                />
-                {category.toUpperCase()}
-              </label>
-              )
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category}
+                    className="mr-2 w-4 h-4"
+                    onChange={()=> handleRadioCategory(category)}
+                    checked={selectedCategory === category}
+                  />
+                  {category.toUpperCase()}
+                </label>
+              );
             })}
         </section>
         {/* ============= keywords ====== */}
@@ -95,6 +157,8 @@ const SideBar = () => {
           <div>
             {keywords.map((keyword, index) => (
               <button
+              value={keyword}
+              onChange={()=>handleKeyWord(keyword)}
                 key={index}
                 className="block text-base mb-2 px-4 py-2 w-full text-left border rounded hover:bg-gray-200"
               >
@@ -104,8 +168,8 @@ const SideBar = () => {
           </div>
         </div>
         {/* ============ reset button ======== */}
-        <button className=" w-full mb-4 py-2 bg-black text-white rounded-md cursor-pointer mt-3 md:mt-5">
-            Reset Filters
+        <button onClick={resetFilter} className=" w-full mb-4 py-2 bg-black text-white rounded-md cursor-pointer mt-3 md:mt-5">
+          Reset Filters
         </button>
       </section>
     </div>
