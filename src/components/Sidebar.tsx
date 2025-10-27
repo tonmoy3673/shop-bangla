@@ -65,7 +65,6 @@ const SideBar = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     type: "min" | "max"
   ) => {
-    e.preventDefault();
     const PriceValue = e.target.value ;
      const value = PriceValue ? parseFloat(PriceValue) : undefined;
      if (type ==='min') {
@@ -158,7 +157,7 @@ const SideBar = () => {
             {keywords.map((keyword, index) => (
               <button
               value={keyword}
-              onChange={()=>handleKeyWord(keyword)}
+              onClick={()=>handleKeyWord(keyword)}
                 key={index}
                 className="block text-base mb-2 px-4 py-2 w-full text-left border rounded hover:bg-gray-200"
               >
