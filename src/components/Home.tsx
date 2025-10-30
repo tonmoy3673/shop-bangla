@@ -3,8 +3,9 @@ import SideBar from "./Sidebar";
 
 const Home = () => {
     return (
-        <div className="">
-          <SideBar/> 
+        <div className="flex h-screen">
+          <SideBar/>
+          
         </div>
     );
 };
