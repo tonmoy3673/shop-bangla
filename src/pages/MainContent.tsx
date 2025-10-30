@@ -10,7 +10,7 @@ const MainContent =()=>{
     const itemsPerPage: number =12;
 
     return (
-        <div>MainContent</div>
+        <section className=" lg:w-220 sm:w-160 xs:w-[20rem] p-5">MainContent</section>
     )
 }
 
