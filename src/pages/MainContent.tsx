@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useProductContext } from "../context/ProductContext";
 import { Tally3 } from "lucide-react";
 import axios from "axios";
+import type { ProductType } from "../types/products.types";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
     useProductContext();
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<ProductType[] | undefined>(undefined);
   const [filter, setFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -16,13 +17,13 @@ const MainContent = () => {
 
   //   =========== fetch products =========//
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProduct = async ():Promise<void>=> {
       let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${
         (currentPage - 1) * itemsPerPage
       }
 `;
       if (keyword) {
-        url = `https://dummyjson.com/products/search?q=${keyword}`;
+        url = `https://dummyjson.com/products/search?q=${encodeURIComponent(keyword)}`;
       }
       setLoading(true);
       try {
@@ -31,7 +32,9 @@ const MainContent = () => {
           console.error("No Product Data Found!");
           setError("URL Error Found!");
         }
-        setProducts(response.data.products);
+        else{
+            setProducts(response.data.products);
+        }
       } catch (err: unknown) {
         console.error(`Failed to Fetch Product Data ${err}`);
         setError(`Failed to Fetch Product ${err}`);
@@ -41,6 +44,11 @@ const MainContent = () => {
     };
     fetchProduct();
   }, [itemsPerPage, keyword, currentPage]);
+
+//   ========== getFilteredProduct =========
+  const getFilteredProduct=()=>{
+
+  }
 
   console.log("Products", products);
 
