@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProductContext } from "../context/ProductContext";
 import { Tally3 } from "lucide-react";
+import axios from "axios";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -9,7 +10,39 @@ const MainContent = () => {
   const [filter, setFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const itemsPerPage: number = 12;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const itemsPerPage: number = 10;
+
+  //   =========== fetch products =========//
+  useEffect(() => {
+    const fetchProduct = async () => {
+      let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${
+        (currentPage - 1) * itemsPerPage
+      }
+`;
+      if (keyword) {
+        url = `https://dummyjson.com/products/search?q=${keyword}`;
+      }
+      setLoading(true);
+      try {
+        const response = await axios.get(url);
+        if (!response.data || !response.data.products) {
+          console.error("No Product Data Found!");
+          setError("URL Error Found!");
+        }
+        setProducts(response.data.products);
+      } catch (err: unknown) {
+        console.error(`Failed to Fetch Product Data ${err}`);
+        setError(`Failed to Fetch Product ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [itemsPerPage, keyword, currentPage]);
+
+  console.log("Products", products);
 
   return (
     <section className=" lg:w-220 sm:w-160 xs:w-[20rem] p-5">
@@ -26,7 +59,7 @@ const MainContent = () => {
             </button>
             {/* =========== dropdown ======== */}
             {dropdownOpen && (
-              <div className="absolute bg-white border-gray-300 rounded mt-2 w-full sm:w-40">
+              <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40">
                 {/* ======== Cheap button ========= */}
                 <button
                   className="block px-4 py-2 w-full text-left hover:bg-gray-200"
@@ -35,24 +68,26 @@ const MainContent = () => {
                   Cheap
                 </button>
                 {/* ============ Expensive button ========== */}
-                 <button
+                <button
                   className="block px-4 py-2 w-full text-left hover:bg-gray-200"
                   onClick={() => setFilter("expensive")}
                 >
                   Expensive
                 </button>
-                    {/* ============ Popular button =========== */}
-                 <button
+                {/* ============ Popular button =========== */}
+                <button
                   className="block px-4 py-2 w-full text-left hover:bg-gray-200"
                   onClick={() => setFilter("popular")}
                 >
                   Popular
                 </button>
-
               </div>
             )}
           </div>
         </div>
+
+        {/* ============= card section ========== */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5"></div>
       </div>
     </section>
   );
