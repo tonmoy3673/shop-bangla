@@ -51,16 +51,34 @@ const MainContent = () => {
   //   ========== getFilteredProduct =========
   const getFilteredProduct = () => {
     let filteredProducts = products;
+
+    // ================= category filter ===========//
     if (selectedCategory) {
       filteredProducts = filteredProducts?.filter(
         (product) => product.category === selectedCategory
       );
     }
+    // ============ min price filter ============//
+    if (minPrice !== undefined) {
+      filteredProducts = filteredProducts?.filter(
+        (product) => product.price >= minPrice
+      );
+    }
 
-    
-    console.log('filteredProducts',filteredProducts);
+    // ============ max price filter ===========//
+    if (maxPrice !== undefined) {
+      filteredProducts = filteredProducts?.filter((product)=> product.price <= maxPrice)
+    };
+
+    // ================ searchProduct ===========//
+    if (searchQuery) {
+      filteredProducts = filteredProducts?.filter((product)=> product.title.toLowerCase().includes(searchQuery.toLowerCase().trim()))
+    }
+
+
+    console.log("filteredProducts", filteredProducts);
   };
-getFilteredProduct();
+  getFilteredProduct();
   console.log("Products", products);
 
   return (
