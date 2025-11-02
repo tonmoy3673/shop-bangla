@@ -67,14 +67,32 @@ const MainContent = () => {
 
     // ============ max price filter ===========//
     if (maxPrice !== undefined) {
-      filteredProducts = filteredProducts?.filter((product)=> product.price <= maxPrice)
-    };
+      filteredProducts = filteredProducts?.filter(
+        (product) => product.price <= maxPrice
+      );
+    }
 
     // ================ searchProduct ===========//
     if (searchQuery) {
-      filteredProducts = filteredProducts?.filter((product)=> product.title.toLowerCase().includes(searchQuery.toLowerCase().trim()))
+      filteredProducts = filteredProducts?.filter((product) =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
+      );
     }
 
+    // ============ filter ==============//
+    if (!filter) return;
+    const sortedProducts = [...(filteredProducts || [])];
+    if (filter) {
+      if (filter === "expensive") {
+        return sortedProducts?.sort((a, b) => b.price - a.price);
+      } else if (filter === "cheap") {
+        return sortedProducts?.sort((a, b) => a.price - b.price);
+      } else if (filter === "popular") {
+        return sortedProducts?.sort((a, b) => b.rating - a.rating);
+      } else {
+        return sortedProducts;
+      }
+    }
 
     console.log("filteredProducts", filteredProducts);
   };
