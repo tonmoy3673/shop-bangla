@@ -3,6 +3,7 @@ import { useProductContext } from "../context/ProductContext";
 import { Tally3 } from "lucide-react";
 import axios from "axios";
 import type { ProductType } from "../types/products.types";
+import BookCard from "./BookCard";
 
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -142,7 +143,10 @@ const MainContent = () => {
         </div>
 
         {/* ============= card section ========== */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5">
+          {/* ============== bookCard ========== */}
+          <BookCard/>
+        </div>
       </div>
     </section>
   );
