@@ -7,7 +7,9 @@ import type { ProductType } from "../types/products.types";
 const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
     useProductContext();
-  const [products, setProducts] = useState<ProductType[] | undefined>(undefined);
+  const [products, setProducts] = useState<ProductType[] | undefined>(
+    undefined
+  );
   const [filter, setFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -17,13 +19,15 @@ const MainContent = () => {
 
   //   =========== fetch products =========//
   useEffect(() => {
-    const fetchProduct = async ():Promise<void>=> {
+    const fetchProduct = async (): Promise<void> => {
       let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${
         (currentPage - 1) * itemsPerPage
       }
 `;
       if (keyword) {
-        url = `https://dummyjson.com/products/search?q=${encodeURIComponent(keyword)}`;
+        url = `https://dummyjson.com/products/search?q=${encodeURIComponent(
+          keyword
+        )}`;
       }
       setLoading(true);
       try {
@@ -31,9 +35,8 @@ const MainContent = () => {
         if (!response.data || !response.data.products) {
           console.error("No Product Data Found!");
           setError("URL Error Found!");
-        }
-        else{
-            setProducts(response.data.products);
+        } else {
+          setProducts(response.data.products);
         }
       } catch (err: unknown) {
         console.error(`Failed to Fetch Product Data ${err}`);
@@ -45,11 +48,19 @@ const MainContent = () => {
     fetchProduct();
   }, [itemsPerPage, keyword, currentPage]);
 
-//   ========== getFilteredProduct =========
-  const getFilteredProduct=()=>{
+  //   ========== getFilteredProduct =========
+  const getFilteredProduct = () => {
+    let filteredProducts = products;
+    if (selectedCategory) {
+      filteredProducts = filteredProducts?.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
 
-  }
-
+    
+    console.log('filteredProducts',filteredProducts);
+  };
+getFilteredProduct();
   console.log("Products", products);
 
   return (

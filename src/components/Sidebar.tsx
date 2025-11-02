@@ -65,36 +65,34 @@ const SideBar = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     type: "min" | "max"
   ) => {
-    const PriceValue = e.target.value ;
-     const value = PriceValue ? parseFloat(PriceValue) : undefined;
-     if (type ==='min') {
-      setMinPrice(value)
-     }
-     else{
-      setMaxPrice(value)
-     }
-
-    
+    const PriceValue = e.target.value;
+    const value = PriceValue ? parseFloat(PriceValue) : undefined;
+    if (type === "min") {
+      setMinPrice(value);
+    } else {
+      setMaxPrice(value);
+    }
   };
 
   // ========= handleRadioCategory =====//
-  const handleRadioCategory=(category:string)=>{
-    setSelectedCategory(category)
+  const handleRadioCategory = (category: string) => {
+    setSelectedCategory(category);
   };
+  console.log('selectedCategory',selectedCategory);
 
   // ============ handleKeyword ========//
-  const handleKeyWord =(keyword : string)=>{
-    setKeyword(keyword)
+  const handleKeyWord = (keyword: string) => {
+    setKeyword(keyword);
   };
 
   // ============ resetFilter =======//
-  const resetFilter =()=>{
-    setSearchQuery('');
-    setSelectedCategory('');
+  const resetFilter = () => {
+    setSearchQuery("");
+    setSelectedCategory("");
     setMinPrice(undefined);
     setMaxPrice(undefined);
-    setKeyword('');
-  }
+    setKeyword("");
+  };
 
   return (
     <div className="w-64 p-5 h-screen">
@@ -123,8 +121,8 @@ const SideBar = () => {
             placeholder="Max"
             type="text"
             className="border-2 mr-2 px-5 mb-3 py-2 w-full"
-            value={maxPrice ?? ''}
-            onChange={(e)=> handlePrice(e,'max')}
+            value={maxPrice ?? ""}
+            onChange={(e) => handlePrice(e, "max")}
           />
         </div>
         {/* ============= categories ========= */}
@@ -142,7 +140,7 @@ const SideBar = () => {
                     name="category"
                     value={category}
                     className="mr-2 w-4 h-4"
-                    onChange={()=> handleRadioCategory(category)}
+                    onChange={() => handleRadioCategory(category)}
                     checked={selectedCategory === category}
                   />
                   {category.toUpperCase()}
@@ -156,8 +154,8 @@ const SideBar = () => {
           <div>
             {keywords.map((keyword, index) => (
               <button
-              value={keyword}
-              onClick={()=>handleKeyWord(keyword)}
+                value={keyword}
+                onClick={() => handleKeyWord(keyword)}
                 key={index}
                 className="block text-base mb-2 px-4 py-2 w-full text-left border rounded hover:bg-gray-200"
               >
@@ -167,7 +165,10 @@ const SideBar = () => {
           </div>
         </div>
         {/* ============ reset button ======== */}
-        <button onClick={resetFilter} className=" w-full mb-4 py-2 bg-black text-white rounded-md cursor-pointer mt-3 md:mt-5">
+        <button
+          onClick={resetFilter}
+          className=" w-full mb-4 py-2 bg-black text-white rounded-md cursor-pointer mt-3 md:mt-5"
+        >
           Reset Filters
         </button>
       </section>
