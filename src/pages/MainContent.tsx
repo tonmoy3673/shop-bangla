@@ -97,7 +97,7 @@ const MainContent = () => {
 
     console.log("filteredProducts", filteredProducts);
   };
-  getFilteredProduct();
+  const filtered = getFilteredProduct();
   console.log("Products", products);
 
   return (
@@ -144,8 +144,13 @@ const MainContent = () => {
 
         {/* ============= card section ========== */}
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-5">
-          {/* ============== bookCard ========== */}
-          <BookCard/>
+          {filtered && filtered.length > 0 ? (
+            filtered.map((product) => (
+              <BookCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p className="text-center text-xl font-semibold">No Filtered Products Found</p>
+          )}
         </div>
       </div>
     </section>

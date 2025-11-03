@@ -1,4 +1,4 @@
-const BookCard = () => {
+const BookCard = ({product}) => {
   return <div>Book Card</div>;
 };
 
