@@ -4,6 +4,7 @@ import "./index.css";
 import RootLayout from "./layouts/RootLayout";
 import Home from "./components/Home";
 import { ProductContextProvider } from "./context/ProductContext";
+import TestCard from "./pages/TestCard";
 
 const root = document.getElementById("root") as HTMLElement;
 
@@ -13,6 +14,7 @@ ReactDOM.createRoot(root).render(
       <Routes>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="card" element={<TestCard/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
